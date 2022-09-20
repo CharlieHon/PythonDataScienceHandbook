@@ -1,4 +1,4 @@
-# Ipython: Beyond Normal Python
+# Ipython超越Python
 
 ## 1.1 启动IPython
 
@@ -202,3 +202,47 @@ IPython实际上创建了叫作 `In` 和 `Out` 地Python变量，这些变量自
 同理，可以输入`%history?`来查看更多相关信息以及可用选项的详细描述。其他类似的魔法命令还有`%run`(该命令将重新执行部分历史命令)和`%save`(该命令将部分历史命令保存到一个文件中)。
 
 ![%save](https://pic4.zhimg.com/80/v2-2a935702ff16d12632bae189371c4bad.png)
+
+## 1.6 IPython和shell命令
+
+在IPython终端直接可以执行shell命令。
+
+### 1.6.1 shell快速入门
+
+`shell`是一种通过文本与计算机交互的方式。大多数计算机用户都熟悉通过菜单点击和拖拽移动等方式与操作系统进行交互，但操作系统早在这些图形用户界面之前就存在，并且早期主要通过输入文本来控制：**用户在提示符后输入一个命令，计算机将按照命令执行任务**。`shell`对于高级任务能提供更多的控制操作。
+
+如下是一些`shell`命令：
+
+```bash
+echo "hello python" # echo类似于Python的打印函数
+
+pwd                 # 打印当前工作路径
+
+ls                  # 列出当前路径的内容
+
+cd d:/              # 改变路径
+
+mkdir               # 创建新的路径
+
+mv 源文件 目标路径   # 将文件移动到指定目录，也可用来更改文件名
+```
+
+![shell命令](https://pic4.zhimg.com/80/v2-9bef40a9643066774e4594cce0ddb455.png)
+
+### 1.6.2 在shell中传入或传出值
+
+`shell`命令不仅可以从IPython中调用，还可以和IPython命名空间进行交互。例如，可以通过一个赋值操作符将任何`shell`命令的输出保存到一个Python列表：
+
+可以通过将`!`符号作为前缀在IPython中执行任何命令行命令。
+
+`shell`命令不仅可以从IPython中调用，还可以和IPython命名空间进行交互。例如，可以通过一个赋值操作符将任何`shell`命令的输出保存到IPython中定义的一个特殊`shell`返回类型。
+
+另一个方向的交互，即将Python变量传入`shell`，可以通过`{varname}`语法实现。
+
+![shell命令](https://pic4.zhimg.com/80/v2-8e0013892cd5afe9854776e683d25bf4.png)
+
+## 1.7 与shell相关的魔法命令
+
+以上在IPython直接使用`shell`命令的方式被称为自动魔法(automagic)函数，可以通过`%automagic`魔法函数进行翻转启用与否。如果`automagic`被打开，可以省略`%`使用类似`sell`的魔法函数。
+
+![%automagic](https://pic4.zhimg.com/80/v2-fe3ccdf06bf9c261591e37ac5ff45c40.png)
