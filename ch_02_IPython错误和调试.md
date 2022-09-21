@@ -10,9 +10,9 @@
 
 |    异常模式                 | 控制异常 |
 | ------------------- | -------- |
-| `Context`(默认情况) |  ![Image](https://pic4.zhimg.com/80/v2-e436051718a2f95f38d93522d18c3cc5.png)        |
-| `Verbose`           |   ![Image](https://pic4.zhimg.com/80/v2-b64dcf45a31c168ee964628d91a4bc99.png)       |
-| `Plain`                    |  ![Image](https://pic4.zhimg.com/80/v2-85e998b09772b6eb9fba7a95ce3c0941.png)        |
+| `Context`(默认情况) |  ![Context](https://pic4.zhimg.com/80/v2-e436051718a2f95f38d93522d18c3cc5.png)        |
+| `Verbose`           |   ![Verbose](https://pic4.zhimg.com/80/v2-b64dcf45a31c168ee964628d91a4bc99.png)       |
+| `Plain`                    |  ![Plain](https://pic4.zhimg.com/80/v2-85e998b09772b6eb9fba7a95ce3c0941.png)        |
 
 ### 1.8.2. 调试：当阅读轨迹追溯不足以解决问题时
 
@@ -73,3 +73,37 @@ IPython中最方便的调试界面是`%debug`魔法命令。**在捕获异常后
 由于`%timeit`在底层做了一些很聪明的事情来组织系统回调对计时过程的干扰。例如，`%timeit`会阻止清除未利用地Python对象(即**垃圾回收**)，该过程可能影响计时。因此，`%timeit`通常比`%time`更快得到结果。
 
 ### 1.9.2 分析整个脚本: %prun
+
+一个程序是由很多单个语句组成的的，有时候对整个脚本计时对比对单个语句计时更重要。`IPython`提供了一种方便的方式来使用分析器，即通过魔法函数`%prun`实现。
+
+结果是一个表格，该表格按照每个函数调用的总时间，显示了哪里的执行时间最长。这这个例子种，大部分执行时间用在`sum_of_list`的列表综合中。**通过观察这个数据，可以帮助了解通过调整哪里来提升算法的性能**。
+
+![%prun](https://pic4.zhimg.com/80/v2-8cebeeeefbfeb10b399a4403b1b45499.png)
+
+### 1.9.3 用`%lprun`进行逐行分析
+
+使用`%lprun`逐行代码分析报告，该功能没有内置于Python和IPython，但是可以通过安装`line_profiler`包来实现。
+
+![%lprun](https://pic4.zhimg.com/80/v2-7c046cfaa9da9adf85fd79b537a866d7.png)
+
+最上面的信息给出了阅读这些结果的关键：报告中的运行时间单位是微秒，可以看到程序中哪些地方最耗时。可以通过这些信息修改代码，使其更高效地实现我们地目的。
+
+### 1.9.4 用`%memit`和`%mprun`进行内存分析
+
+另一种分析是分析一个操作所用地内存量，可以通过IPython的另一个扩展来评估，即`memory_profiler`。和`line_profiler`一样，首先用`pip`安装这个扩展。
+
+内存分析扩展包括两个有用的魔法函数：
+
+- `%memit`提供的内存消耗计算功能类似于`%timeit`
+- `mprun`提供的内存消耗计算功能类似于`%lprun`
+
+![%memit](https://pic4.zhimg.com/80/v2-b010b006d9848807eebd71d9fab40119.png)
+
+可以看到这个函数大概消耗了120MB的内存。
+
+对于逐行代码的内存消耗描述，可以用`%mprun`魔法函数。但这个魔法函数仅仅对独立模块内部的函数有效，而对于Notebook本身不起作用，所以首先`%%file`在当前文件夹创建一个简单的模块，将该模块命名为`mprun_demo.py`。它包含`sum_of_list`函数，该函数中包含一次加法，能使内存分析结果更清晰：
+
+| ![%mprun](https://pic4.zhimg.com/80/v2-dbf767cd419bc7c234846aef484cd3df.png)    | ![%mprun](https://pic4.zhimg.com/80/v2-7e4b08c918bf26557dcfcc4bd053cda1.png)    |
+| --- | --- |
+
+`Increment`列告诉我们每行代码对总内存预算的影响：创建和删除列表`L`时用掉了149MB的内存。这是除了Python解释器本身外最消耗内存资源的部分。
